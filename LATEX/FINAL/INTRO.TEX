@@ -1,0 +1,107 @@
+\section{Introduction}
+
+The basis of this project was the study and design of algorithms for the
+partial sequencing of the human genome on a variety of sequential and
+parallel architectures.  This work was done under the supervision
+of Dr. Michael Minkoff of the Computing and Telecommunications Division
+(CTD).  The research was done in support of a genome sequencing project
+headed by Dr. Radoje Drmanac and Dr. Radomir Crkvenjakov of the Biological
+and Medical Research Division (BIM).  Larry Rudsinski (CTD) also aided in
+the optimization and design of the implemented code.
+
+The algorithm consists of two main sections.  The first section is for the
+generation of a sample, randomly generated, data table which will simulate
+the data that will be generated in the lab by the biologists.  It will be used
+for the development of the second section of the algorithm.  The second
+section is the actual reconstruction of the genome from the sample data.
+
+\subsection{Table Generation}
+The generation of the table must be done so as to emulate the experimental
+results.  The table is created to represent all of the data that will be
+known when the attempt to reconstruct the genome is made.  For now, the
+table will be created using data that would result if no errors occurred in
+the experiments.  However, the experimental data will have errors;
+therefore, the table generation will eventually have to be modified to
+simulate false positive (true results that should be false) and false
+negative (results that are incorrectly false) results.
+
+The first step in the construction of the table is to generate a
+random sequence that shall serve as the genome.  This sequence consists of
+random combination of the letters 'A', 'T', 'C', and 'G'.  These letters
+represent the four nucleotides that are found in DNA sequences.  These
+nucleotides are known as : adenosine (A), thymidine (T), cytidine (C), and
+guanosine (G).  This sequence must be constructed in a truly random way
+for all later statistical studies to be considered true.  The length of the
+sequence shall be given in base pairs (bp), where base pairs is the number
+of the characters in the sequence.  All sections of the sequence
+shall also have their lengths given in this
+manner.  This sequence shall be referred to as the 'genome' or plainly
+as the 'sequence'.
+
+The next step in the generation process is to break the sequence up into
+smaller sections
+called 'fragments'.  These fragments are to have a random amount of overlap
+with the previous fragment, however there will be set values for the
+maximum and minimum amount of overlap two adjacent fragments can have.
+
+Third, a table of 'probes' should be generated.  The probes are
+combinations of nucleotides of varying length.  At present all combinations
+of length six are being considered.  The resulting table of probes looks like
+:
+\begin{center}
+\begin{tabular}{c}
+AAAAAA \\ 
+AAAAAT \\ 
+AAAAAC \\ 
+AAAAAG \\ 
+AAAATA \\ 
+ \vdots \\ 
+GGGGGG
+\end{tabular}
+\end{center}
+
+Once the probes and fragments have been generated, the table can be
+constructed.  The table is to show if a given probe is in a given fragment.
+The process used to determine if a probe is contained in a fragment, or how
+this data is stored is of little consequence at this juncture, but it
+will play an increasingly greater role as the study continues.
+
+\subsection{Reconstruction}
+The reconstruction portion of the algorithm is to actually rebuild the
+sequence (genome) from the table that is given.  In the test cases, it
+would be an attempt to reconstruct the generated sequence in the first step
+using the table that was created later in the same step.  In the actual
+problem, complete reconstruction is not possible due to areas in the genome
+that are repetitious.  The reason that repetition cannot be treated by the
+algorithm shall be explained later.
+
+The general idea behind the reconstruction is that given a specific probe
+from a given fragment, one can look in the table to find a probe that is
+also in the fragment that overlaps the current probe with a maximum amount
+of overlap.  This new probe shall be called the 'extension' probe.  In the 
+test case, all probes, except for the final probe in a fragment, will 
+have at least one probe
+(with a maximum of four) that have this amount of overlap.  In the real
+case, it is possible for a probe, other than the final probe in a fragment,
+to not have an extension due to a false negative result in the experiment.
+
+If a probe has more than one extension, then a branching point has occurred.
+This is called a branching point because two distinct paths are possible.
+This branch can be resolved in more than one way.  Two possibilities are
+to look in adjacent (overlapping) fragments, or to look in similar 
+sequences.  The best way to resolve this has not yet been determined, but
+the process that will be implemented will be a combination of different
+methods.
+
+A problem arises when a section of a fragment repeats, or if a probe
+overlaps itself (such as AAAAAA).  This problem arises because there is no
+way to determine how many times these sections should be repeated.  The
+best way to handle this situation is to note it and move on, because the
+repetition will eventually end.
+Also, the biologists are not very interested in these
+sections of repetition.
+
+Since the proper method for reconstruction has not yet been decided on,
+most of the research has been on generating data that will help this
+decision.  Also, a lot of attention has been given to deciding which
+architectures are best suited for this problem.

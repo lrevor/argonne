@@ -1,0 +1,25 @@
+#
+# makefile 8.3 91/04/04 11:09:21
+#
+# This file is used to compile and link the host.f, prompt.f,
+# fx.f, and node.f files for the pi numerical integration example.
+#
+F77 = f77
+GENOME   = main3c.o frag_gen3.o seq_gen.o mat_gen.o rand.o statd.o
+GENOME2  = set_bit.o get_bit.o get_list.o
+TIME = second.o mclock.o
+
+NEXT = nextc.o
+
+.f.o:
+	$(F77) $(F77FLAGS) -c $<
+
+.c.o:
+	$(cc) -O -c $<
+
+mainc:
+	make "F77=if77" "cc=icc" gen
+
+
+gen:	$(GENOME) $(GENOME2) $(NEXT)
+	$(F77) -o node $(GENOME) $(GENOME2) $(NEXT) -node

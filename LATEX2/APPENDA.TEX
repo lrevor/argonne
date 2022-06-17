@@ -1,0 +1,118 @@
+\section{Appendix A}
+
+The following is a quick reference for the syntax of the commands covered
+in this document.
+
+\subsection{qsub}
+
+{\bf qsub} allows a user to submit a batch job to DQS.
+
+{\bf SYNTAX}
+\begin{verbatim}
+qsub [queue] [parameters] scriptfile
+\end{verbatim}
+
+{\bf PARAMETERS}
+\begin{description}
+\item[-e fname] Tells DQS to redirect all output to STDERR to
+the file specified by fname.  DQS defaults to jobnumber.jobname.ERR if
+this option is not specified.
+\item[-o fname] Tells DQS to redirect all output to STDOUT to
+the file specified by fname.  DQS defaults to jobnumber.jobname.OUT if this
+option is not specified.
+\item[-eo fname] Tells DQS to redirect all output to STDERR and
+STDOUT to the file specified by fname.
+\item[-cwd] The cwd flag tells DQS to execute the script from the same
+absolute directory that the job was submitted from.  If this is not
+specified, DQS will default to the users home directory, and the files
+will not be found, unless they are in the home directory or the script
+file changes the directory via the cd command.  If the absolute pathnames
+are not the same across the machines, then the user should use the cd
+command instead of setting the -cwd flag.  If the user sets the cwd flag
+and the machine cannot find the directory, then it will default to the
+users home directory on that machine.
+\item[-mu EmailAddress] Tells DQS who to send mail to if the -mb,
+-me, or -ms flags are set.  This must be set if any of the mail flags
+are set.
+\item[-mb] Tells DQS to send mail to notify when the job has begun.
+\item[-me] Tells DQS to send mail to notify when the job has finished.
+\item[-ms] Tells DQS to send mail to notify when the job has been suspended
+or enabled after a suspend.
+\item[-G groupname num] This option tells DQS that the job
+will need 'num' \queues in the \group 'groupname'.  More than one -G
+parameter may be specified, and they can be used in conjunction with
+the -q parameter.  However, only one resource should be specified
+unless the job is a parallel job under \pvm.  If the job is not a
+parallel job, it will be keeping resources unavailable that could be
+used by other jobs.
+\item[-q queuename] This option tells DQS that the job will need to use the
+\queue 'queuename'.  More than one -q parameter may be specified, and
+they can be used in conjunction with the -G option.  However, users
+should not specify a specific \queue unless the code was written for a
+specific machine.
+\item[-pvm] This flag tells DQS that the job will be using \pvm.  DQS will
+then set up the environment appropriate for running a \pvm job by
+creating the \pvm host file and starting the \pvm daemons on each of the
+allocated resources.  This process is invisible to the DQS user.
+\item[-M queuename] The tells DQS that the \pvm master should be on the
+\queue 'queuename'.
+\item[-s shell] This specifies the shell that the script needs to execute
+under.
+\item[-v] This is the verify option.  With this option set, the command
+line and script file are parsed and the requests are then written to
+STDOUT.
+\item[-H] With this flag set, all request are considered to be hard.  This
+means that the job cannot be executed until all resource requests are
+available.  This is the default for all jobs.
+\item[-S] This sets all of the resource requests to be considered soft.
+The job can be executed even when all of the resources are not
+available.
+\item[-r] This enables the job to be restarted by DQS if a system error
+occurs while it is running.  This is the default.
+\item[-nr] This tells DQS not to restart the job if a system error occurs
+when
+the job is running.
+\end{description}
+
+\subsection{qstat}
+
+{\bf qstat} allows users to see the status of the \queues and jobs in the
+DQS system.
+
+{\bf SYNTAX}
+\begin{verbatim}
+qstat [parameters]
+\end{verbatim}
+
+{\bf PARAMETERS}
+\begin{description}
+
+\item[-s]  Reports only the \queue name, architecture, and the status
+of the \queue.  It also reports the job id and job owner if there is a
+job running on the \queue.
+
+\item[-A arc]  Reports information only on \queues of the given
+architecture type.
+
+\item[-G group]  Reports information only on the \queues that are in
+the \group specified.
+
+\item[-q queue] Reports information only on the specified \queue.
+
+\item[-r] Sort the \queues in increasing order of load average.
+
+\item[-u username] Report only information on jobs owned by the user
+specified.
+
+\end{description}
+
+\subsection{qdel}
+
+{\bf qdel} deletes a job from the DQS system.
+
+{\bf SYNTAX}
+
+\begin{verbatim}
+qdel jobnumber
+\end{verbatim}
+

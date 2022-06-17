@@ -1,0 +1,24 @@
+# Note : Compile the nodes on the sun using make mainc.  Compile the host
+#        on the front_end using make host.
+F77 = f77
+CC = cc
+GENOME   = main3c.o frag_gen3.o seq_gen.o mat_gen.o rand.o
+GENOME2  = set_bit.o get_bit.o get_list.o statd.o
+TIME = second.o mclock.o
+
+NEXT = nextc.o
+
+.f.o:
+	$(F77) $(F77FLAGS) -c $<
+
+.c.o:
+	$(CC) -c $<
+
+mainc:
+	make "F77=if77" "CC=icc" node
+
+host:	$(GENOME) $(GENOME2) $(TIME)
+	$(F77) -o host $(GENOME) $(GENOME2) $(TIME) -host
+
+node:	$(NEXT)
+	$(F77) -o node $(NEXT) $(FLDFLAGS) -node

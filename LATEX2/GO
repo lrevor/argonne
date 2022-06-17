@@ -1,0 +1,48 @@
+#! /usr/bin/csh
+set exit = 0
+while ($exit == 0)
+clear
+cat go_screen
+echo Please Make Selection :
+set input = `head -1`
+switch ($input)
+  case "1":
+    vi dqs_man.tex
+  breaksw
+  case "2":
+    vi intro.tex
+  breaksw
+  case "3":
+    vi overview.tex
+  breaksw
+  case "4":
+    vi submit.tex
+  breaksw
+  case "5":
+    vi monit.tex
+  breaksw
+  case "6":
+    vi kill.tex
+  breaksw
+  case "7":
+    vi appendA.tex
+  breaksw
+  case "8":
+    vi appendB.tex
+  breaksw
+  case "9":
+    latex dqs_man    
+    sleep 5
+  breaksw
+  case "10":
+    xpreview dqs_man
+  breaksw
+  case "11":
+    dvips dqs_man
+    lpr dqs_man.ps
+  breaksw
+  case "12":
+    set exit = 1
+  breaksw
+endsw
+end

@@ -1,0 +1,28 @@
+#Note : compile the nodes on the sun, but the host on the front-end to the
+#       Gamma.
+F77 = f77
+GENOME   = main3c.o frag_gen3.o seq_gen.o mat_gen.o rand.o statd.o
+GENOME2  = set_bit.o get_bit.o get_list.o
+TIME = second.o mclock.o
+
+NEXT = nextc.o
+
+.f.o:
+	$(F77) $(F77FLAGS) -c $<
+
+.c.o:
+	$(cc) -O -c $<
+
+nodes:
+	make "F77=if77" "cc=icc" gen
+	make "F77=if77" "cc=icc" next
+
+host:	host.o
+	$(F77) -o host host.o -host
+
+gen:	$(GENOME) $(GENOME2)
+	$(F77) -o gen $(GENOME) $(GENOME2) -node
+
+next:	$(NEXT)
+	$(F77) -o next $(NEXT) $(FLDFLAGS) -node
+

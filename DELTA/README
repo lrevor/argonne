@@ -1,0 +1,9 @@
+This is a version of the genome code that will run on the delta.
+
+It will also run on the gamma with one modification.   To run it on the
+Gamma, a line in main3c.f has to be
+changed.  It must have include 'fcube.h' instead of 'fmesh.f'.  The host
+and the node are the same program.  It knows weather to act as a host or
+not depending if it is on node 0.  A file called Gammastart is in the Delta
+directory.  In runs the code once you have run getcube to get some nodes.
+It will release them if it terminates normally.

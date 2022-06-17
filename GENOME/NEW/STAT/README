@@ -1,0 +1,4 @@
+These versions are the same as main3c, except that it only generates
+extensions for 3 probes in the fragment.  All of the .dat files are the
+results of the runs using using fragment length that is given in the file
+name.

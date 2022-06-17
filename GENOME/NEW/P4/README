@@ -1,0 +1,11 @@
+This P4 version of the genome project was written using the Gamma version
+in the directory /GAMMA/GENOME1.  To compile for use on the suns, use make
+mainc.  Alter the file procgroup to contain the workstations you wish it to
+run on.
+
+For documentation for this version, see the basic version in /GENOME/NEW
+under mainc.
+
+A version of the genome code has been written that is better suited for P4.
+It is in the /DELTA directory.  I think that it will run better than this
+version if it is converted to P4.

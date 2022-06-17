@@ -1,0 +1,97 @@
+         IDENT     NEXT
+         ENTRY     NEXT,L10,L20,L30,L40
+*
+*
+*
+****   DEFINE SYMBOLIC NAMES FOR ARGUMENTS
+*
+POSIT    DEFARG
+PLEN     DEFARG
+PNUM     DEFARG
+PLIST    DEFARG
+NEXT_POS DEFARG
+*
+*    DEFINE SYMBOLIC NAMES FOR TEMPORARY B REGISTERS
+*
+ PLN     DEFB
+*
+*    DEFINE SYMBOLIC NAMES FOR TEMPORARY T REGISTERS
+*
+ TIME    DEFT
+*
+         COMMON
+ SUM     BSS       50
+         COMMON    *
+*
+ NEXT    ENTER     MODE=USER,TYPE=ADDRESS,PRELOAD=0,ALIGN=ON
+*
+         S7        RT             READ CLOCK
+         T.TIME    S7             STORE TIME
+         ARGADD    A3,POSIT       A3 = ADDRESS POSIT
+         ARGADD    A2,PLEN        A2 = ADDRESS PLEN
+         ARGADD    A4,PLIST       A4 = ADDRESS PLIST
+         ARGADD    A5,NEXT_POS    A5 = ADDRESS NEXT_POS
+         S7        <2             S7 = 2 BIT MASK
+         A1        50
+*        A0        SUM            A0 = ADDRESS SUM
+         VL        A1
+         V0        ,A0,1          V0 = SUM
+         A1        64
+         VL        A1
+         V1        0              V1 = POS_VEC
+         A1        50
+         VL         A1
+
+         S3        0,A3           A3 = POSIT= NEWPOS
+         A2        0,A2           A2 = PLEN = EXT_LEN
+         S2        1              S2 = 1
+*
+         B.PLN     A2
+         A2        A2-1           A2 = EXT_LEN-1
+*
+         S1        V0,A2          S1 = SUM (EXT_LEN)
+*
+ L10     =         *
+         S1        S1+S2          S1 = SUM(EXT_LEN) + 1
+         V1,A2     S3             V1 = POS_VEC(EXT_LEN) = NEWPOS
+         A3        S3             A3 = NEWPOS
+         A3        A3+A5          A3 = NEXT_POS(NEWPOS)
+         A3        0,A3           S3 = NEXT_POS(NEWPOS)
+*
+         V0,A2     S1             V0 = SUM(EXT_LEN) + 1
+         A2        A2+1
+         A0        A2-A1          A0 = EXT_LEN - 50
+         JAP       L40
+*
+         A7        A4+A3          A7 = ADDRESS PLIST(NEWPOS)
+         S3        A3             S3 = NEWPOS= NEXT_POS(NEWPOS)
+ L20     =         *
+*
+*
+         S0        0,A7           S0 = PLIST(NEWPOS)
+         S1        V0,A2          S1 = SUM (EXT_LEN)
+         JSN       L10
+*
+ L30     =         *
+         S3        S3+S2          S3 = NEWPOS+1
+         S0        S3&S7          S0 = NEWPOS .AND. MASK
+         A3        S3             A3 = NEWPOS
+         A7        A4+A3          A7 = ADDRESS PLIST(NEWPOS)
+         JSN       L20
+ L40     =         *
+         A2        A2-1           A2 = EXT_LEN
+         S3        V1,A2          S3 = NEWPOS = POS_VEC(EXT_LEN)
+         A7        B.PLN
+         A0        A2-A7          A0 = EXT_LEN-PLEN
+         A3        S3             A3 = NEWPOS
+         JAP       L30
+*
+         A0        SUM
+         ,A0,1     V0             STORE SUM TO MEMORY
+
+         S6        RT             READ THE CLOCK
+         S7        T.TIME
+         S6        S6-S7
+         S6        S6+S5          S6 = UPDATED ITIME
+         EXIT      MODE=USER
+         END

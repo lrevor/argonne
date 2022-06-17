@@ -1,0 +1,20 @@
+# makefile for genome project
+COMP = cf77
+FFLAG=-c -Wf"-i64 -em"
+LFLAG=
+# FILES = second.o mclock.o
+#   LASTUFF = dgefa.o dgesl.o ddot.o
+GENOME  = main3b.o frag_gen3.o seq_gen.o mat_gen.o rand.o
+GENOME2 = set_bit.o get_bit.o get_list.o statb.o nextb.o
+
+GENOMEc  = main3c.o frag_gen3.o seq_gen.o mat_gen.o rand.o
+GENOME2c = set_bit.o get_bit.o get_list.o statc.o nextc.o
+
+main:	$(GENOME) $(GENOME2) $(FILES)
+	$(COMP) $(LFLAG) $(GENOME) $(GENOME2) $(FILES) -o main
+
+mainc:	$(GENOMEc) $(GENOME2c) $(FILES)
+	$(COMP) $(LFLAG)  $(GENOMEc) $(GENOME2c) $(FILES) -o mainc
+
+.f.o : ;	$(COMP) $(FFLAG) $*.f
+.c.o : ;	cc  -c $*.c

@@ -1,0 +1,3 @@
+vi int_par.inc
+rm main3c.o
+make maind

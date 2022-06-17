@@ -1,0 +1,6 @@
+The stat program is to read in a table (in T's and F's) and generates the
+data on the number of extensions.  This is used for the versions that do
+not already do this calculation.  It is out of date, because the versions
+that do not automatically do this are the old versions.
+
+Parameters have to be changed for the different size tables.

@@ -1,0 +1,17 @@
+The subdirectories GENOME1 and GENOME2 contain two different version of the
+genome code.
+
+Genome1 contains a version whose host (generation of the table and control
+over the nodes) runss on the frant end of the gamma.  The host and node are
+two separate programs.
+
+Genome2 contains a version whose host runs on a node of the gamma itself.
+In this version the host and node programs are different programs as well.
+
+A better version was created when looking to run on the delta.  It is in
+the directoy /DELTA.  To run it on the Gamma, a line in main3c.f has to be
+changed.  It must have include 'fcube.h' instead of 'fmesh.f'.  The host
+and the node are the same program.  It knows weather to act as a host or
+not depending if it is on node 0.  A file called Gammastart is in the Delta
+directory.  In runs the code once you have run getcube to get some nodes.
+It will release them if it terminates normally.

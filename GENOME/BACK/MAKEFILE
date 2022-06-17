@@ -1,0 +1,27 @@
+# makefile for genome project
+
+FILES = second.o mclock.o
+#   LASTUFF = dgefa.o dgesl.o ddot.o
+GENOME1 = main.o prob_match.o prob_gen.o frag_gen.o seq_gen.o
+GENOME2 = main2.o frag_gen.o seq_gen.o base4_conv.o mat_gen.o
+GENOME3 = main3.o frag_gen3.o seq_gen.o base4_conv.o mat_gen3.o
+GENOME4 = main4.o frag_gen3.o seq_gen.o prob_match4.o prob_gen4.o
+GENOME5 = main5.o frag_gen3.o seq_gen.o base4_conv.o mat_gen5.o
+
+main:	$(GENOME1) $(FILES) 
+	f77  -O $(GENOME1) $(FILES) -o main
+
+main2:	$(GENOME2) $(FILES) 
+	f77  -O $(GENOME2) $(FILES) -o main2
+
+main3:	$(GENOME3) $(FILES) 
+	f77  -O $(GENOME3) $(FILES) -o main3
+
+main4:	$(GENOME4) $(FILES) 
+	f77  -O $(GENOME4) $(FILES) -o main4
+
+main5:	$(GENOME5) $(FILES) 
+	f77  -O $(GENOME5) $(FILES) -o main5
+
+.f.o : ;	f77  -O -c $*.f
+.c.o : ;	cc  -O -c $*.c

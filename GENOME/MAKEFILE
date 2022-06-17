@@ -1,0 +1,17 @@
+# makefile for genome project
+
+FILES = second.o mclock.o
+#   LASTUFF = dgefa.o dgesl.o ddot.o
+GENOMEa = main3.o frag_gen3.o seq_gen.o base4_conv.o mat_gen3.o
+GENOMEa1 = stat.o next.o
+GENOMEb = main3b.o frag_gen3.o seq_gen.o base4_conv.o mat_gen3b.o
+GENOMEb2 = set_bit.o get_bit.o statb.o nextb.o
+
+main3:	$(GENOMEa) $(GENOMEa1) $(FILES) 
+	f77  -O $(GENOMEa) $(GENOMEa1) $(FILES) -o main3
+
+main3b:	$(GENOMEb) $(GENOMEb2) $(FILES)
+	f77  -O $(GENOMEb) $(GENOMEb2) $(FILES) -o main3b
+
+.f.o : ;	f77 -O -c $*.f
+.c.o : ;	cc  -O -c $*.c

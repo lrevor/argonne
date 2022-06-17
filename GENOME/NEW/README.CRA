@@ -1,0 +1,4 @@
+To use the cray assembly language routine, rename the routine nextc.s and
+compile it on the cray.  The use the makefile as normal on the cray.
+
+Use the makefile MAKE on the cray.

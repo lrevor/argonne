@@ -1,0 +1,18 @@
+# makefile for genome project
+
+FILES = second.o mclock.o
+
+GENOMEd  = main3c.o frag_gen3.o seq_gen.o mat_gen.o rand.o
+GENOME2d = set_bit.o get_bit.o get_list.o statd.o nextd.o
+
+GENOMEe  = main3e.o frag_gen3.o seq_gen.o mat_gen.o rand.o
+GENOME2e = set_bit.o get_bit.o get_list.o state.o nexte.o
+
+maind:	$(GENOMEd) $(GENOME2d) $(FILES) 
+	f77  -O $(GENOMEd) $(GENOME2d) $(FILES) -o maind
+
+maine:	$(GENOMEe) $(GENOME2e) $(FILES) 
+	f77  -O $(GENOMEe) $(GENOME2e) $(FILES) -o maine
+
+.f.o : ;	f77 -g -c $*.f
+.c.o : ;	cc  -g -c $*.c

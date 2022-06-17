@@ -1,0 +1,3 @@
+vi int_par2.inc
+rm main3e.o
+make maine

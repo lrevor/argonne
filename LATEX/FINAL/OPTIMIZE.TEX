@@ -1,0 +1,132 @@
+\section{Optimization and Analysis}
+
+During the creation of the code for counting expansion possibilities, an
+effort was made to optimize the code for use on various machines and
+architectures.  It was decided to analyze the performance on the various
+machines because the reconstruction code will behave in a fashion similar
+to that of the expansion code.  Because of the size of the genome problem,
+it will be necessary to know which architectures are best suited for this
+type of problem.  The computers that were used in this analysis are :
+\ariel, \achilles, \hp, \gamma, \alxmp\ and the \delta.  A version of the 
+code was also
+written implementing P4
+\footnote{P4 is based on "Argonne Macros" which is
+documented in the book "Portable
+Programs for Parallel Processors", by Boyle, Butler, Disz, Glickfeld, Lusk,
+Overbeek, Patterson, and Stevens.  Major contributions to P4 were also made
+by Bob Olson, University of Illinois, Remy Evard, University of Oregon, and
+David Leibfritz, Argonne National Laboratory.}
+to simulate an MIMD
+distributed memory system across
+a network of workstations.
+
+The first implementations of the code were run on workstations because of
+the ease in code development and accessibility.  The timings involved the
+expansion out to 30bp from every probe in twenty fragments.  Each of the
+computers expanded on the same table, so the amount of work being done on
+each of the machines is identical.  Table~\ref{'worksta1'} shows the results
+of the timings on the different machines.
+
+\input worksta1
+
+The next implementation was on a single processor \alxmp.  Transporting the
+code and compilation required little to no effort from the workstation
+versions.  A second version was written in Cray assembly language (CAL) to
+utilize the Cray's vector registers to minimize the accesses to main
+storage.  Only the routine that actually counts the number of expansion
+possibilities was rewritten in CAL.  The rest of the code was left as is.
+The timings for the \xmp\ is given in Table~\ref{'cray1'}
+
+\input cray1
+
+The timings for the Cray using the original routines show that the Cray's
+extra architectural enhancements do not apply to this type of problem.
+It is interesting to note that the \achilles\ and \hp\ both had better
+timings than the Cray until the CAL routine was written.  Due to the
+expense of using the Cray, it is not a very cost-effective solution to the
+problem.
+
+Since each of the fragments are totally independent from each other, the
+expansions for each of the fragments can be computed simultaneously.  Because
+of this, the code was ported to an \gamma (Gamma).  Since the Gamma is an MIMD
+distributed memory system, the code had to be split into two sections.  The
+main (driver) section of the code handled the generation of the table data
+and the control of the message passing to the independent processors.  The
+node section of the code was to count the extension possibilities for a
+given fragment.  Because the system is distributed memory, each of the
+processors only knew the data for the particular fragment it was working
+on.  This data is passed to the processor by the driver section when the
+node becomes available.
+
+The revision to the code required a lot of changes to the structure of the
+code, but the portions of the code that did the actual computations remained
+the same.  The code was set up for the driver section to run on the front-end
+(\intel) of the Gamma, while the node section was put on each of the
+processors.  Table~\ref{'gamma1'} shows the timings for the Gamma using 1, 2,
+4, and all 8 of its hypercube processors.  Note that the timings for the
+Gamma are the maximum time needed by one of its processors.  Also, since
+each of the Gamma processors is dedicated, it keeps track of real time from
+when the node process is started.  Unlike the other machines, time spent
+waiting to receive messages is included.
+
+\input gamma1
+
+This table shows that the Gamma was not as efficient as some of the workstations
+when using only one node.  When the number of nodes is increased by one,
+the comparison between the Gamma and the workstations becomes more
+interesting.  As the length of the fragments increase, the Gamma
+increasingly outperforms the workstations; however, at the smallest
+fragment length, the Gamma did not do as well.
+
+In preparation for running the code on the \delta (which is possibly the
+world's fastest supercomputer), the code that was used on the Gamma was
+modified so the driver section of the code would run on one of the Gamma's
+processors as well.  This version takes full advantage of the Gamma's
+hypercube message passing system.  The decrease in time required for
+message passing is shown by the timings.  The timings for this version is 
+given in Table~\ref{'gamma2'}.  Because the
+driver section requires a node in this version, the number of processors
+that can be used by the node section is decreased by one.
+
+\input gamma2
+
+This new code was then ported to the \delta\ (Delta).  Due to the number of
+processors on the Delta (512),
+the size of the problem used in all of the prior timings is trivial.
+Because of this the number of fragments was increase to 512 (from 20) so 
+the Delta's
+timings would be of interest.  Table~\ref{'delta1'} shows the timings that
+were done on the Delta.  
+
+\input delta1
+
+The Delta uses a Mesh message passing system
+unlike the Gamma's Hypercube.  The Mesh size refers to the size of the grid
+that is being used by the program.  To find the actual number of nodes
+being used, all one has to do is multiply the two coordinates.
+
+After seeing the these results, we thought that it would be interesting to
+see how a network of Sun workstations would compare.
+Therefore, the original Gamma code was converted to P4 so that it could be
+run parallel on a network of workstations.  The conversion from \gamma\
+message passing calls to P4 message passing calls required very little
+work.  However, when using P4, all node processes must be self terminating.
+This requirement did not exist on the Gamma.  This required a little change
+in the structure of the code that was used on the nodes.
+
+When running the P4 version, a \achilles\ was used to run the driver section
+of the code, while the nodes processes were all run on a \ariel.  
+Table~\ref{'p41'} shows the results of these timings.  The time shown
+is the minimum node time.  Unlike the Gamma this time is user time and not
+real time.  This means that time waiting for messages is not included in
+the time.
+
+\input p41
+
+After seeing the results of these timings, it is clear that this type of
+problem is best solved in parallel.  Out of all the versions implemented, I
+believe the most cost effective version is the P4 version running on a
+network of workstation.  It is not as fast as the Gamma, but it is not far
+behind.  However, the Gamma version can be easily scaled up to run on more
+processors by porting it to the \delta, while the P4 version requires the
+addition of more workstations.

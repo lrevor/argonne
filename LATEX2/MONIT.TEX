@@ -1,0 +1,30 @@
+\section{Monitoring Jobs}
+
+Once a job has been submitted to the DQS system, it becomes almost
+invisible to the user.  Because of this, DQS has routines included
+with it that allow a user to keep up with his job.
+
+The first method is to have the DQS system send mail messages about
+the job.  DQS can be told to mail a user when the job is started,
+finished, suspended, or enabled.  All of this is done using the \qsub
+command which is described above.  First, the user that will receive
+the mail must be specified.  This is done with the -mu option of
+\qsub.  After this is set, any of the -mb, -me, or -ms option can be
+specified which tell DQS to mail at the beginning of a job, end of a
+job, or when a job is suspended/enabled respectively.
+
+The second method is to query DQS about the status of the job.  This
+is done with the {\bf qstat} command.  The \qstat command reports
+information on each of the \queues and all of the jobs that are pending.
+For every \queue, it gives
+information on the \queue and also on the the job (if any) that is
+running on the \queue.
+Users can use this information to see the
+status of his jobs.
+
+The \qstat command gives a lot of useful information, but some of the
+information is often not very relevant.  Because of this, the \qstat command
+has several command line options that allow the user to tell DQS what
+information that he wants reported.  These options are given in
+appendix A.
+

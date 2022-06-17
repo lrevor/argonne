@@ -1,0 +1,145 @@
+\section{Submitting a DQS Job}
+
+Since the major task for most users will be submitting jobs, this
+topic will be covered first.  As mentioned earlier, jobs are submitted
+to the DQS system by submitting a unix shell script.  Therefore, most
+of this section will deal with describing the shell script and how to
+customize it for DQS.
+
+A shell script is a standard unix text file.  It can be created by
+using any text editor (vi, ed, emacs, xedit, etc.).
+A DQS job shell script has two distinct purposes.  The first is define the
+environment needed by the job.  The second is to give the commands that
+comprise the job itself.
+Listed below is a sample script that could be submitted to the
+DQS system to compile a sample FORTRAN code and then execute the
+compiled program.
+
+\begin{verbatim}
+# This is a sample script file for compiling and
+#  running a sample FORTRAN program under DQS.
+
+# We want DQS to send mail when the job begins
+#  and when it ends.
+
+#$ -mu EmailAddress
+#$ -mb
+#$ -me
+
+# We want to name the file for the standard output
+#  and standard error.
+
+#$ -eo test.out
+
+# Change to the directory where the files are located.
+
+cd TEST
+
+# Now we need to compile the program 'test.f' and
+#  name the executable 'test'.
+
+f77 test.f -o test
+
+# Once it is compiled, we can run the program.
+
+test
+
+# End of script file.
+\end{verbatim}
+
+This script file is a short example, but it shows that script files
+are easy to use.
+
+In this script file, there are three types of lines.  These are
+comment lines, DQS command lines, and shell command lines.  Each of
+these types will be described below.
+
+Any line in the script file that has the '\#' character in column one and is
+not followed by a '\$' or a '!' is a comment line and is not considered
+by DQS or the unix shell.  They are included in the file to
+provide information on what the file is supposed to be doing.  Included
+in this script file are several comment lines to help explain what it
+is doing to those who are new to script files.
+
+Lines in the script file that begin with \#\$ in columns 1 and 2 are
+commands to DQS.  Our example contains four such commands.  The
+{\bf -mu} command
+tells the \qmaster who to send all mail to.  The {\bf -mb} command
+signifies that
+mail should be sent when the job begins, while {\bf -me} states that
+mail should
+be sent when the job completes.  The {\bf -eo} command specifies the
+file that all
+output to {\bf stdout} and {\bf stderr} (standard output and standard
+error) should be redirected to.
+All DQS commands are read when the job is
+submitted regardless of their position in the script file.
+These same DQS commands could have been specified on the {\bf qsub} command
+line when the job was submitted.
+Any valid command line
+parameter for the \qsub command can be placed in the scriptfile as a
+DQS command.  Users should be aware of the parameters that are present in
+the scriptfile so they do not unintentionally replicate the parameter.
+If more than one resource request is present, DQS will assume that the job
+will need the stated resources and reserve them for the job.  Parameters
+other than resource requests should not be duplicated.
+These parameters will be
+discussed later along with the \qsub command and are given in appendix A.
+
+The final type of command in a DQS script file is the unix shell
+command.  Any line in the script file that does not begin with the
+'\#' character (with the exception of the '\#!' combination)
+is considered to be a unix shell command.  When the job
+is run, each shell command will be executed in order starting from the
+top of the file.  These commands will behave in the same manner as if
+they were issued from the unix prompt.  For testing, a DQS script file
+can be run as a standard script file from the unix prompt if it does not
+contain any references to environment variables that are set by DQS.
+When this
+is done, all DQS commands will be treated as comments, because
+they all begin with the '\#' character.  To execute a DQS script file
+, the user must only give it execute privileges with
+the unix {\bf chmod} command.
+
+Once the script file is written, it can be submitted to DQS.
+The routine that submits jobs to DQS
+is called {\bf qsub}.  Two examples of \qsub calls to submit the above
+script file are :
+\begin{verbatim}
+qsub -G groupname 1 sub
+qsub -q queuename sub
+\end{verbatim}
+where groupname is the DQS \group that is being requested, queuename is
+the DQS \queue that is being requested, and sub is the name of the
+scriptfile described above.
+
+In the above examples, the -q and -G parameters are both resource
+requests.  It should be noted that both of the \qsub commands have a
+resource request.  A job will not be accepted without specifying a resource
+on the command line or in the job script.  If a resource is not specified,
+DQS would not
+know where to send the job.
+The '1' after groupname in the first
+example tells DQS that you will only need one \queue
+in the \group that is specified.  This number should only be
+greater than one for a parallel job under \pvm.  If the job is not a
+parallel job, more than one resource should not be requested and the
+number after the queuename should be left at '1'.  In any case, a value
+must be specified for the job to be accepted.
+
+In the first \qsub example, the job 'sub' will be sent to one of the
+\queues in the \group 'groupname' and then executed.  In the second \qsub
+example, the job will be sent to the \queue 'queuename'.
+
+The syntax for the \qsub command is :
+\begin{verbatim}
+qsub [queue] [parameters] scriptfile
+\end{verbatim}
+There are several command line
+parameters that can be given with the \qsub routine.  A list of these
+parameters is given in appendix A.
+These options may be used either on the command line for \qsub, or
+placed in the job script file.  They will have the same effect in either
+place.
+
+

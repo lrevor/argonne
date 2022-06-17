@@ -1,0 +1,4 @@
+killcube
+load node;waitcube
+killcube
+relcube

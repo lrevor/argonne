@@ -1,0 +1,111 @@
+\section{Statistical Considerations}
+
+The first step in designing an algorithm for the reconstruction of the
+genome is to find the scale of the problem.  The method under
+consideration for the reconstruction is to extend from
+probes to a certain length (20-30bp) and then find a method to determine
+how to combine these extensions to reconstruct the fragments and the sequence.
+A major concern in this approach is the number of possibilities that might
+occur when
+extending from a probe to a specific length.  It is obvious that as the
+extension length increases, the possibilities increase.  Therefore, there
+is a need to balance the length of the extensions and the number of
+extensions that result.
+
+A code was written that would accept a table of data as
+input and return the number of possible extensions that occur for
+various extension lengths.  This Code extends on every probe that
+occurs in each of the fragments.  It keeps a total for the number of
+possible extensions that occur in the fragment for each of the extension
+lengths.  It also
+notes the number of probes that are in the fragments.  Knowing the number
+of probes that are in the fragment allows for the calculation of the
+average number of extensions for a probe in the fragment by dividing the
+totals for the fragment by the number of probes that are present in the
+fragment.
+
+In this code, the probes are referred to by their position in the data table.
+The following table shows the correspondence between the probes and the
+numbers that refer to them :
+\begin{center}
+\begin{tabular}{||c|r|c||} \hline
+Probe  & Reference \# & Bit Representation \\ \hline
+AAAAAA & 0 & 000000000000 \\
+AAAAAT & 1 & 000000000001 \\
+AAAAAC & 2 & 000000000010 \\
+AAAAAG & 3 & 000000000011 \\
+AAAATA & 4 & 000000000100 \\
+\vdots & \vdots & \vdots \\
+GGGGGA & 4092 & 111111111100 \\
+GGGGGT & 4093 & 111111111101 \\
+GGGGGC & 4094 & 111111111110 \\
+GGGGGG & 4095 & 111111111111 \\ \hline
+\end{tabular}
+\end{center}
+Each of these numbers is represented in memory in the same fashion as the
+bit representations used in version 6 of the data table construction code.
+Representing the probes this way allows for probes of all lengths to be
+referenced without any changes to the code.
+
+It is interesting to note that the four possible extensions to a probe are
+next to each other in the table.  Knowing this, if the first extension is
+calculated, the other three are exactly determined.  Considering the bit
+representations for these numbers, the extension can be obtained by zeroing
+the left two bits in the number and then left shift the number two bits
+with a zero fill.  For example, 'CGGGGG' has 'GGGGGA', 'GGGGGT', 'GGGGGC'
+and 'GGGGGG' as its extensions.  It can be seen in the table that all four
+of these can be determined by knowing that 'GGGGGA' is the first of these,
+and that the other three follow in the table.
+
+The bit representation for 'CGGGGG' is '101111111111'.  In order to
+discover that 'GGGGGA' is the first of the extension probes, the left two
+bits from the bit representation of 'CGGGGG' must be removed to obtain
+'1111111111'.  Next, the new bit pattern must be shifted left two bits with
+a zero fill.  The result of this operation is the pattern '111111111100'.
+This new pattern is the pattern for the probe 'GGGGGA', which is what was
+needed to be obtained.  The extension probes for any probe can be
+determined in this fashion.  It is also not dependent on the probe length.
+
+Table~\ref{'table2'} is a sample of output from the code.  The data was generated from a
+table that was created using fragment lengths of 500bp and probe length of
+6bp.
+
+\input table2
+
+The routines that generate the data table should be modified so the
+fragments do not have overlap regions when generating the data for
+statistical analysis.  The reason for this is that regions of overlap will
+have a greater influence on the results of the analysis.  The results will
+not be statistically true if there are regions of overlap.  When doing an
+analysis to find the average number of extensions from a given probe, the
+same number of probes should be used from each fragment.  If one fragment
+contributes data from more probes than the others, it will have a greater
+influence on the outcome and the results will not be true again.
+
+Table~\ref{'table3'} was generated from 100 fragments, each contributing
+data from 3 probes that were chosen randomly from the possible probes in
+the fragment.  The data in the table is the average number of extensions
+that each probe had when extending to the given lengths.  Extension lengths
+include the length of the initial probe which was 6bp.
+
+\input table3
+
+In trying to determine an overlap between two fragments using only the data
+table, all probes that are in both of the fragments must be considered.
+However, if a probe is in both of the fragments, but outside the region of
+overlap, there is no way of determining that it is not suppose to be in the
+overlap region.  It is interesting to compare the possible extensions
+from a region of overlap to the possible extension from
+non-overlapping fragments of the same length as the overlap region.  It is
+obvious that the number of possible extensions from an overlap region should
+be slightly higher
+because probes could be considered that are in both fragments, but not in
+the overlap.  This increase
+is of particular interest.
+
+Table~\ref{'table4'} shows the difference
+between the number of possible extensions
+from an overlap region and a non-overlapping fragment of the same
+length.
+
+\input table4

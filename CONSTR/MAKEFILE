@@ -1,0 +1,11 @@
+# makefile for genome project
+
+FILES = second.o mclock.o
+#   LASTUFF = dgefa.o dgesl.o ddot.o
+FILES2 = stat.o next.o
+
+stat:	$(FILES2) $(FILES)
+	f77  -O $(FILES2) $(FILES) -o stat
+
+.f.o : ;	f77  -O -c $*.f
+.c.o : ;	cc  -O -c $*.c

@@ -1,0 +1,26 @@
+C     THIS IS A SUBROUTINE TO GENERATE THE SEQUENCE RANDOMLY.
+
+      SUBROUTINE SEQ_GEN (SEQ_LEN, SEED, SEQ)
+
+      INTEGER COUNT, SEQ_LEN
+      REAL SEED, VALUE
+      CHARACTER*(*) SEQ
+
+      DO 10 COUNT = 1, SEQ_LEN
+
+      SEED = RAND(SEED)
+      VALUE = SEED * 4.0
+      IF (VALUE .LE. 1.0) THEN
+        SEQ(COUNT:COUNT) = 'A'
+       ELSE IF (VALUE .LE. 2.0) THEN
+        SEQ(COUNT:COUNT) = 'T'
+       ELSE IF (VALUE .LE. 3.0) THEN
+        SEQ(COUNT:COUNT) = 'G'
+       ELSE 
+        SEQ(COUNT:COUNT) = 'C'
+      END IF
+
+  10  CONTINUE
+
+      RETURN
+      END

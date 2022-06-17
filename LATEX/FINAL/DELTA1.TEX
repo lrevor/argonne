@@ -1,0 +1,18 @@
+\begin{table}[bth]
+\caption{Expansion Timing (seconds) for the \delta\ (512 Fragments)}
+\label{'delta1'}
+\begin{center}
+\begin{tabular}{||r|rrr||}  \hline
+\multicolumn{1}{||c|}{Fragment} & \multicolumn{3}{c||}{Mesh Size} \\ 
+\multicolumn{1}{||c|}{Length} & \multicolumn{1}{c}{(4,8)} &
+\multicolumn{1}{c}{(8,8)} &
+\multicolumn{1}{c||}{(8,16)} \\ \hline
+500bp &  71.016 &  39.424 &  25.692 \\
+750bp\footnotemark\ & 887.070 & 489.265 & 314.623 \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+\footnotetext{The timings for the 750bp fragment lengths were done on the
+Delta after it had been booted with the slow debug kernal.  I am not sure
+how this affects the timings, but they will still provide an interesting
+benchmark.}

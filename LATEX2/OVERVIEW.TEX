@@ -1,0 +1,50 @@
+\section{Overview}
+
+The DQS system has one routine that controls the system.  This routine
+and the machine that it runs on are called the {\bf qmaster}.  The
+\qmaster is responsible for processing new requests (jobs submissions,
+queries, etc.), keeping track of already existing jobs, monitoring the
+status of all of the machines known to DQS, and updating all of the
+files used for accounting and management of the system.
+
+All requests that are submitted to the DQS system are processed by the
+\qmaster.  This does not mean that the user has to be logged on to the
+\qmaster in order to submitt a request.  A request can be submitted
+from any machine the DQS system considers to be a trusted host.  When
+the request is submitted, it is passed across the TCP/IP network to
+the \qmaster for processing.
+
+When a user submits a job, he must specify the resources that he wants
+the job to use.  This is to tell DQS how many and what kind of
+machines he needs for the job.  The two different types of resources
+in the DQS system are the {\bf queue} and the {\bf group}.
+
+The \queue is the standard computer science first-in-first-out (fifo)
+queue.  Each \queue resides on a particular machine.  A job is sent
+to a machine by submitting it to the \queue that resides on the
+machine.  If the \queue is busy with a job when a new job is submitted,
+the new job simply waits its turn in line in the \queue.  More than one
+\queue may reside on a particular machine, but this is not recommended
+except for the purpose of having \queues of differing priorities or if the
+machine has sufficient resources for handling more than one \queue.
+
+A \group is a collection of \queues, where each \queue inside the \group
+resides on a machine of a particular architecture.  This is how DQS
+solves the problem of having multiple types of architectures.  When
+the user specifies which \group he wants, he is in effect specifying
+the class of machines he would like.  When a job is submitted to a
+\group, DQS sends the job to a \queue in the \group that is available.
+If all of the \queues are busy when a job is submitted to the \group,
+the job will wait its turn in line at the \group level.  This feature of
+waiting at the \group level is what allows for load leveling across a
+network of machines.
+
+It is better for all users to submit jobs to a \group rather than a
+\queue due to the load leveling capabilities of DQS.  If all jobs are
+submitted to the \group, the amount of waiting time will be minimized,
+because all of the machines inside the \group will be efficiently
+utilized.  The only reason a user should submit a job to a
+particular \queue is if the code was designed to run on a particular
+machine instead of a class of machines.
+
+

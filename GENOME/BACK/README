@@ -1,0 +1,69 @@
+     In every directory, there is a makefile that will allow compilation of
+that routine.  All versions are the same as the previous with the noted
+differences.
+
+/GENOME/BACK
+  Original versions of the algorithm to generate the table.
+
+  1. main
+     The sequence is the actual letters A,T,C,G.  The fragments are the
+letters and are actually extracted from the sequence.  The Probes are
+generated in letter format.  The table is in logical format.
+     The table is created by physically checking to see if a probe is in a
+given fragment, then marking the appropriate result.
+
+  2. main2
+     Probes are no longer generated.  To generate the table, every fragment
+is scanned.  Each probe-length part of the frag is copied out and converted
+to a number that represents the probe.  The appropriate place is then marked
+true in the table.  It was now necessary to initialize the table to false.
+
+  3. main3
+     The fragments are no longer stored separately.  They are now represented
+by an integer pointing to the first character in the seq that is in the frag.
+Since every frag is of the same length, then the frags can be exactly
+determined by looking at the frag length portion of the sequence starting at
+the appropriate character in the sequence.
+
+  4. main4
+     This version was written for a comparison.  It is the same as version 1
+except that the probes are stored in memory, and the frags are handled as in
+version 3.  The table is created the same as in version 1.
+
+  5. main5
+     This is an improvement on version 3.  Each fragment is no longer
+scanned.  Since the fragments overlap, parts of the sequence were converted
+more than once.  This version scans the sequence, copying out each probe
+length section and the determines which fragments contain that part of the
+sequence by implementing a binary search.
+
+
+/GENOME
+The next generation.
+
+  1. main3
+     Same as the main3 above, except that it also calls the routines to
+calculate the number of extensions per fragment for statistical analysis.  A
+change in the random number generator was also made.
+
+  2. main3b
+     The table is now stored in bits.
+
+
+/GENOME/NEW
+It gets even better.
+
+  1. main
+     This is based on main3b above.  The sequence is now stored in bits.
+This also causes the routine that coverts a probe length section to a number
+to be different.
+
+  2. mainc
+     When finding the extension, the next possible probe is precalculated
+before they are used.  This allows for them to only be calculated once.  The
+next routine was also rewritten and cleaned up.
+
+  3. maind
+     The next routine is structured.  Even though it looks prettier, the
+non-structured version in mainc is faster on the machines we have tested it
+on.

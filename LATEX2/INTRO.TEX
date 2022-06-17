@@ -1,0 +1,67 @@
+\section{Introduction}
+
+DQS\footnote{Developed at the Supercomputer Computations Research
+Institute at Florida State University by Tom Green and Jeff Snyder} -
+Distributed Queuing System - is an effective method for
+distributing the batch workload among multiple unix-based machines.  In
+doing so, it increases the productivity of all of the machines and
+also increases the number of jobs that can be completed in a given
+time period.  Also, by increasing the productivity of the
+workstations, the need for outside computational resources is reduced.
+
+A job is submitted to the DQS system via a job shell script.
+The job script is a standard unix shell script (Bourn shell, C shell, or
+Korn shell) that will executed on one of the DQS machines when the
+appropriate resources become available.
+The script can also be used to tell DQS to do the
+following :
+\begin{itemize}
+\item Initiate the script under a specific unix shell.
+\item Write all output sent to {\bf stdout} and {\bf stderr} to a
+specified file.
+\item Mail a specific user when any changes are made to the status of
+the job.
+\item Prepare the system for running a parallel job under
+\pvm\footnote{\pvm was developed at the University of Tennessee, Oak
+Ridge National Laboratory, and Emory University} - Parallel Virtual
+Machine.
+\item Specify the type of machine you are requesting that the
+job should be run on.
+\end{itemize}
+The script file can be used to do multiple tasks.  By
+combining shell commands with DQS commands, the user will be able to
+use the system more efficiently.  A proper understanding of the script
+file is the key to learning how to run existing code under the DQS
+system.
+
+Once the job script has been submitted to DQS, it is scheduled
+and then sent to one of the machines on the system when one
+becomes available.  The process DQS uses
+to distribute the workload and decide which machine each job will be
+sent to will be
+discussed later.
+
+Included in the system are routines that were developed
+for the user to have control over his jobs.  These routines provide the
+ability to check the status of a job(s), delete a job from the queuing
+system, and check on the availability of resources.
+
+For increased ease of use, the DQS system provides an X windows
+interface.  All users of the system that are running under X windows
+can use these routines.  With these routines, the user can
+accomplish any task that he could have done from the command prompt
+with a little more ease.  Also, the X interface allows users to get an
+interactive xterm window through DQS if he feels the job must be run
+interactively.
+
+The DQS system was also developed with console users in mind.
+Routines are provided that monitor the X window server for activity to
+determine if the interactive user is at the terminal.  If activity is
+detected, then DQS can suspend the queues that are on the
+machine.  If the queues are suspended and the terminal has been inactive for
+a given period, DQS will unsuspend (enable) the queues on the machine.
+
+Overall, DQS provides efficiency, greater productivity, and increased
+cost efficiency while still maintaining functionality.
+
+
